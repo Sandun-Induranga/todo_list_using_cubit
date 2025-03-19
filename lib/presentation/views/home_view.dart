@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_list_cubit/cubit/todo_cubit.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final TextEditingController _controller = TextEditingController();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -13,9 +18,10 @@ class HomeView extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: _controller,
+                    decoration: const InputDecoration(
                       labelText: 'Enter a task',
                       border: OutlineInputBorder(),
                     ),
@@ -24,7 +30,17 @@ class HomeView extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () {
-                    // Add task
+                    final title = _controller.text;
+                    if (title.isNotEmpty) {
+                      context.read<TodoCubit>().addTodo(title);
+                      _controller.clear();
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please enter a task'),
+                        ),
+                      );
+                    }
                   },
                 ),
               ],
