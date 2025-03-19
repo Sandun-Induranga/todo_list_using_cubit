@@ -74,9 +74,7 @@ class HomeView extends StatelessWidget {
                         ),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            // Delete task
-                          },
+                          onPressed: () => context.read<TodoCubit>().deleteTodo(todo.id),
                         ),
                       );
                     },
