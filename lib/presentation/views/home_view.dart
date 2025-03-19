@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_list_cubit/cubit/todo_cubit.dart';
 
 import '../widgets/add_todo_section.dart';
+import '../widgets/todo_list.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -10,50 +9,15 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return const Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const AddTodoSection(),
-            const SizedBox(height: 16),
-            Expanded(
-              child: BlocBuilder<TodoCubit, TodoState>(
-                builder: (context, state) {
-                  if(state.todos.isEmpty){
-                    return const Center(
-                      child: Text('No tasks added yet!'),
-                    );
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.todos.length,
-                    itemBuilder: (context, index) {
-                      final todo = state.todos[index];
-                      return ListTile(
-                        leading: Checkbox(
-                          value: todo.isCompleted,
-                          onChanged: (value) => context.read<TodoCubit>().toggleTodo(todo.id),
-                        ),
-                        title: Text(
-                          todo.title,
-                          style: TextStyle(
-                            decoration: todo.isCompleted
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                          ),
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () => context.read<TodoCubit>().deleteTodo(todo.id),
-                        ),
-                      );
-                    },
-                  );
-                }
-              ),
-            ),
+            AddTodoSection(),
+            SizedBox(height: 16),
+            TodoList(),
           ],
         ),
       ),
