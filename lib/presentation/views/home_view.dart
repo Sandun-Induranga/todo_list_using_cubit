@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list_cubit/cubit/todo_cubit.dart';
 
+import '../widgets/add_todo_section.dart';
+
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    final TextEditingController _controller = TextEditingController();
 
     return Scaffold(
       body: Padding(
@@ -16,35 +16,7 @@ class HomeView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(
-                      labelText: 'Enter a task',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    final title = _controller.text;
-                    if (title.isNotEmpty) {
-                      context.read<TodoCubit>().addTodo(title);
-                      _controller.clear();
-                    }else{
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please enter a task'),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
+            const AddTodoSection(),
             const SizedBox(height: 16),
             Expanded(
               child: BlocBuilder<TodoCubit, TodoState>(
