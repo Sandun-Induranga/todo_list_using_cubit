@@ -46,20 +46,43 @@ class HomeView extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text('Task ${index + 1}'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      // Delete task
+            Expanded(
+              child: BlocBuilder<TodoCubit, TodoState>(
+                builder: (context, state) {
+                  if(state.todos.isEmpty){
+                    return const Center(
+                      child: Text('No tasks added yet!'),
+                    );
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.todos.length,
+                    itemBuilder: (context, index) {
+                      final todo = state.todos[index];
+                      return ListTile(
+                        leading: Checkbox(
+                          value: todo.isCompleted,
+                          onChanged: (value) => context.read<TodoCubit>().toggleTodo(todo.id),
+                        ),
+                        title: Text(
+                          todo.title,
+                          style: TextStyle(
+                            decoration: todo.isCompleted
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            // Delete task
+                          },
+                        ),
+                      );
                     },
-                  ),
-                );
-              },
+                  );
+                }
+              ),
             ),
           ],
         ),
